@@ -1,4 +1,11 @@
 package edu.javagroup.ekivoki.converter;
 
-public class GameConverter {
+import edu.javagroup.ekivoki.dto.GameDto;
+import edu.javagroup.ekivoki.model.Game;
+
+public interface GameConverter {
+
+    GameDto convert(Game source);
+
+    Game convert(GameDto source);
 }

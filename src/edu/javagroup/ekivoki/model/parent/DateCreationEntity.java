@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public abstract class DateCreationEntity {
+public abstract class DateCreationEntity extends BaseEntity {
 
     private Date dateCreation;
 }
