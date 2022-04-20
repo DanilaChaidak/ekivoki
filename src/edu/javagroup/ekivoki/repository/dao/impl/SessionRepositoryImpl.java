@@ -18,7 +18,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         Optional<Connection> connectionOptional = ConnectionSingleton.instance(Optional.empty()).getConnection();
         QuerySingleton queryMap = QuerySingleton.instance(null);
         if (connectionOptional.isPresent()) {
-            String queryStr = queryMap.getQuery("game_sessionFindById");
+            String queryStr = queryMap.getQuery("sessionFindById");
             try (PreparedStatement preparedStatement = connectionOptional.get().prepareStatement(queryStr)) {
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -42,7 +42,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         QuerySingleton queryMap = QuerySingleton.instance(null);
         if (connectionOptional.isPresent()) {
             try (Statement statement = connectionOptional.get().createStatement()) {
-                ResultSet resultSet = statement.executeQuery(queryMap.getQuery("game_sessionFindById"));
+                ResultSet resultSet = statement.executeQuery(queryMap.getQuery("sessionFindAll"));
                 List<Session> result = new ArrayList<>();
                 while (resultSet.next()) {
                     Session session = new Session();
@@ -64,7 +64,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         Optional<Connection> connectionOptional = ConnectionSingleton.instance(Optional.empty()).getConnection();
         QuerySingleton queryMap = QuerySingleton.instance(null);
         if (connectionOptional.isPresent()) {
-            try (PreparedStatement preparedStatement = connectionOptional.get().prepareStatement(queryMap.getQuery("game_sessionCreate"), Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement preparedStatement = connectionOptional.get().prepareStatement(queryMap.getQuery("sessionCreate"), Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, model.getSessionUuid());
                 if (preparedStatement.executeUpdate() > 0) {
                     ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -84,7 +84,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         Optional<Connection> connectionOptional = ConnectionSingleton.instance(Optional.empty()).getConnection();
         QuerySingleton queryMap = QuerySingleton.instance(null);
         if (connectionOptional.isPresent()) {
-            String queryStr = queryMap.getQuery("game_sessionFindByUUID");
+            String queryStr = queryMap.getQuery("sessionFindByUUID");
             try (PreparedStatement preparedStatement = connectionOptional.get().prepareStatement(queryStr)) {
                 preparedStatement.setString(1, sessionUuid);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -108,7 +108,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         QuerySingleton queryMap = QuerySingleton.instance(null);
         if (connectionOptional.isPresent()) {
             try (Statement statement = connectionOptional.get().createStatement()) {
-                statement.executeUpdate(queryMap.getQuery("game_sessionDeleteByTime"));
+                statement.executeUpdate(queryMap.getQuery("sessionDeleteByTime"));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -1,0 +1,43 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# query.list
+# ----------------------------------------------------------------------------------------------------------------------
+# session
+# ----------------------------------------------------------------------------------------------------------------------
+sessionFindAll=SELECT id, session_uuid, date_creation FROM ek_session
+sessionFindById=SELECT id, session_uuid, date_creation FROM ek_session WHERE id = ?
+sessionBySessionUUID=SELECT id, session_uuid, date_creation FROM ek_session WHERE session_uuid = ?
+sessionCreate=INSERT INTO ek_session (session_uuid, date_creation) VALUES (?, NOW())
+sessionDeleteByTime=DELETE FROM ek_session WHERE date_creation <= NOW() - INTERVAL 1 DAY
+# ----------------------------------------------------------------------------------------------------------------------
+# topic
+# ----------------------------------------------------------------------------------------------------------------------
+topicFindAll=SELECT id, name FROM topic
+topicFindOneById=SELECT id, name FROM topic WHERE id = ?
+topicCreate=INSERT INTO topic (name) VALUES (?)
+topicUpdate=UPDATE topic SET name = ? WHERE id = ?
+topicDeleteById=DELETE FROM topic WHERE id = ?
+# ----------------------------------------------------------------------------------------------------------------------
+# question
+# ----------------------------------------------------------------------------------------------------------------------
+questionFindAll=SELECT id, name, description FROM question
+questionFindOneById=SELECT id, name, description FROM question WHERE id = ?
+questionCreate=INSERT INTO question (name, description) VALUES (?, ?)
+questionUpdate=UPDATE question SET name = ?, description = ? WHERE id = ?
+questionDeleteById=DELETE FROM question WHERE id = ?
+# ----------------------------------------------------------------------------------------------------------------------
+# card
+# ----------------------------------------------------------------------------------------------------------------------
+cardFindAll=SELECT id, topic_id, question_id, question_number, question_text, lead_time, date_creation, last_modified, version FROM ek_card
+cardFindById=SELECT id, topic_id, question_id, question_number, question_text, lead_time, date_creation, last_modified, version FROM ek_card WHERE id = ?
+cardFindByNumber=SELECT id, topic_id, question_id, question_number, question_text, lead_time, date_creation, last_modified, version FROM ek_card WHERE number = ?
+cardCreate=INSERT INTO ek_card (topic_id, question_id, question_number, question_text, lead_time, date_creation, last_modified, version) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), 0)
+cardUpdate=UPDATE ek_card SET topic_id = ?, question_id = ?, question_number = ?, question_text = ?, lead_time = ?, last_modified = NOW(), version = ? WHERE id = ?
+cardDelete=DELETE FROM ek_card WHERE id = ?
+# ----------------------------------------------------------------------------------------------------------------------
+# game
+# ----------------------------------------------------------------------------------------------------------------------
+gameFindAll=SELECT id, session_id, card_id FROM ek_game
+gameFindOneById=SELECT id, session_id, card_id FROM ek_game WHERE id = ?
+gameFindBySessionUuid=SELECT game.id, game.session_id, game.card_id FROM game INNER JOIN game_session ON game_session.id = game.session_id WHERE game_session.session_uuid = ?
+gameCreate=INSERT INTO ek_game (session_id, card_id) VALUES (?, ?)
+gameDeleteById=DELETE FROM ek_game WHERE id = ?
