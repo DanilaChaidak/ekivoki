@@ -8,7 +8,7 @@ import lombok.Setter;
 public class CardDto {
 
     private Long id;
-    private TopicDto topicId;
+    private TopicDto topicDto;
     private QuestionDto questionId;
     private int questionNumber;
     private String questionText;
