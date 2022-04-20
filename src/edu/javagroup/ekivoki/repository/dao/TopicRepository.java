@@ -9,5 +9,5 @@ public interface TopicRepository extends JdbcRepository<Topic> {
 
     Optional<Topic> update(Topic topic);
 
-    void remove();
+    void remove(Long id);
 }

@@ -65,7 +65,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         QuerySingleton queryMap = QuerySingleton.instance(null);
         if (connectionOptional.isPresent()) {
             try (PreparedStatement preparedStatement = connectionOptional.get().prepareStatement(queryMap.getQuery("game_sessionCreate"), Statement.RETURN_GENERATED_KEYS)) {
-                //preparedStatement.setString(1, Session.getSessionUuid());
+                preparedStatement.setString(1, model.getSessionUuid());
                 if (preparedStatement.executeUpdate() > 0) {
                     ResultSet resultSet = preparedStatement.getGeneratedKeys();
                     if (resultSet.next()) {
@@ -81,6 +81,24 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public Optional<Session> findBySessionUuid(String sessionUuid) {
+        Optional<Connection> connectionOptional = ConnectionSingleton.instance(Optional.empty()).getConnection();
+        QuerySingleton queryMap = QuerySingleton.instance(null);
+        if (connectionOptional.isPresent()) {
+            String queryStr = queryMap.getQuery("game_sessionFindByUUID");
+            try (PreparedStatement preparedStatement = connectionOptional.get().prepareStatement(queryStr)) {
+                preparedStatement.setString(1, sessionUuid);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    Session gameSession = new Session();
+                    gameSession.setId(resultSet.getLong("id"));
+                    gameSession.setSessionUuid(resultSet.getString("session_uuid"));
+                    gameSession.setDateCreation(resultSet.getDate("date_creation"));
+                    return Optional.of(gameSession);
+                }
+            } catch (SQLException ex) {
+                System.out.println(this.getClass().getSimpleName() + ": " + ex.getMessage());
+            }
+        }
         return Optional.empty();
     }
 
